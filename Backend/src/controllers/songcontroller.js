@@ -1,6 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
 import Song from '../models/songModel.js';
 import Cloudinary from '../config/cloudinary.js';
+import songModel from '../models/songModel.js';
 // import connectCloudinary from './src/config/cloudinary.js';
 // connectCloudinary();
 
@@ -21,7 +22,7 @@ const addSong = async (req,res) => {
         const imageUpload = await cloudinary.uploader.upload(imageFile.path, {resource_type: "image"});
         const duration = `${Math.floor(audioUpload.duration/60)}:${Math.floor(audioUpload.duration%60)}`
 
-        console.log(name, desc, album, audioUpload, imageUpload);
+        // console.log(name, desc, album, audioUpload, imageUpload);
         
 
         const songData = new Song({
@@ -44,7 +45,38 @@ const addSong = async (req,res) => {
 }
 
 const listSong = async (req,res) => {
+    try {
+        
+        const allSongs = await songModel.find({});
+        res.status(200).json({success: true, songs: allSongs});
+
+    } catch (error) {
+
+        console.error("Error listing songs:", error);
+        res.status(500).json({success: false, message: "Failed to retrieve songs"});
+        
+    }
     
 }
 
-export { addSong, listSong };
+const removeSong = async (req, res) => {
+    try {
+        console.log("req.body", req.body); // Add this line to confirm
+
+        const { id } = req.body;
+        const song = await songModel.findByIdAndDelete(id);
+
+        if (!song) {
+            return res.status(404).json({ success: false, message: "Song not found" });
+        }
+
+        res.status(200).json({ success: true, message: "Song removed successfully" });
+    } catch (error) {
+        console.error("Error removing song:", error);
+        res.status(500).json({ success: false, message: "Failed to remove song" });
+    }
+};
+
+
+
+export { addSong, listSong, removeSong };   
