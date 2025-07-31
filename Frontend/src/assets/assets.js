@@ -138,7 +138,7 @@ export const songsData = [
     },
     {
         id:2,
-        name: "Remainder",
+        name: "Reminder",
         image: img3,
         file:song3,
         desc:"The Weeknd    ",

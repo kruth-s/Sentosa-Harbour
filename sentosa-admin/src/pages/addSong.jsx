@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 // import { Form } from 'react-router-dom'
 import { assets } from '../assets/assets'
 import axios from 'axios';
@@ -14,7 +14,7 @@ const AddSong = () => {
     const [desc, setDesc] = useState("");
     const [album, setAlbum] = useState("none");
     const [loading, setLoading] = useState(false);
-    // const [albumData, setAlbumData] = useState([]);
+    const [albumData, setAlbumData] = useState([]);
 
 
     const onSubmitHandler = async (e) => {
@@ -31,10 +31,14 @@ const AddSong = () => {
             formData.append('audio',song)
             formData.append('album',album)            
             
-            const response = await axios.post(`${url}/api/song`, formData);
+            const response = await axios.post(`${url}/api/song/add`, formData, {
+                headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+            });
             console.log(response.data);
 
-            if(response.data.sucess){
+            if(response.data.success){
                 toast.success("Song Added Successfully");
                 setName("");
                 setDesc("");
@@ -54,6 +58,25 @@ const AddSong = () => {
         setLoading(false);
     }
 
+        const loadAlbumData = async () =>{
+            try {
+                const response = await axios.get(`${url}/api/album/list`);
+
+                if (response.data.success) {
+                    setAlbumData(response.data.albums);
+                }
+                else {
+                    toast.error("Unable to load albums data")
+                }
+            } catch (error) {
+                toast.error("Error Occured")
+            }
+        }
+
+
+        useEffect(()=>{
+            loadAlbumData();
+        },[])
 
   return loading ? (
     <div className='grid place-items-center min-h[80vh]'>
@@ -105,9 +128,7 @@ const AddSong = () => {
         <p>Album</p>
         <select onChange={(e)=>setAlbum(e.target.value)} defaultValue={album} className='bg-transparent outline-green-600 border-2 border-gray-400 p-2.5 w-[150px]'>
             <option value="none">None</option>
-            <option value="album1">Starboy</option>
-            <option value="album2">After Hours</option>
-            <option value="album3">Hurry Up Tommorow</option>
+            {albumData.map((item,index)=>(<option key={index} value={item.name}>{item.name}</option>))}
 
         </select>
 

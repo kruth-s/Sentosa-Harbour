@@ -1,17 +1,22 @@
-import React, { useEffect, useRef } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom'
-import DisplayHome from './displayhome'
-import DisplayAlbum from './displayalbum'
-import { albumsData } from '../assets/assets'
+import React, { useEffect, useRef } from "react";
+import { Route, Routes, useLocation } from "react-router-dom";
+import DisplayHome from "./displayhome";
+import DisplayAlbum from "./displayalbum";
+// import { albumsData } from '../assets/assets'
+import { PlayerContext } from "../context/PlayerContext";
+import { useContext } from "react";
 
 const Display = () => {
+  const { albumsData } = useContext(PlayerContext);
 
   const displayRef = useRef();
   const location = useLocation();
   const isAlbum = location.pathname.includes("album");
-  const albumId = isAlbum ? location.pathname.split('/').pop() : "";
-  const bgColor = isAlbum && albumsData[Number(albumId)] ? albumsData[Number(albumId)].bgColor : undefined;
-  
+  const albumId = isAlbum ? location.pathname.split("/").pop() : "";
+  const bgColor =
+    isAlbum && albumsData.length
+      ? albumsData.find((x) => x._id == albumId).bgColour
+      : "#121212";
 
   useEffect(() => {
     if (isAlbum) {
@@ -22,13 +27,23 @@ const Display = () => {
   }, [isAlbum, bgColor]);
 
   return (
-    <div ref= {displayRef} className='w-[100%] m-2 px-6 pt-4 rounded bg-[#121212] text-white overflow-auto lg:w-[75%] lg:ml-0' >
-      <Routes>
-        <Route path='/' element={<DisplayHome />} />
-        <Route path='/album/:id' element={<DisplayAlbum />} />
-      </Routes>
+    <div
+      ref={displayRef}
+      className="w-[100%] m-2 px-6 pt-4 rounded bg-[#121212] text-white overflow-auto lg:w-[75%] lg:ml-0"
+    >
+      {albumsData.length > 0 ? (
+        <Routes>
+          <Route path="/" element={<DisplayHome />} />
+          <Route
+            path="/album/:id"
+            element={
+              <DisplayAlbum album={albumsData.find((x) => x._id == albumId)} />
+            }
+          />
+        </Routes>
+      ) : null}
     </div>
-  )
-}
+  );
+};
 
-export default Display
+export default Display;

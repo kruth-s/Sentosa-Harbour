@@ -1,18 +1,28 @@
 import React, { useContext } from 'react'
 import Navbar from './navbar'
 import { useParams } from 'react-router-dom'
-import { albumsData, assets, songsData } from '../assets/assets';
-import { PlayerContext } from '../context/playercontext';
+import { assets } from '../assets/assets';
+import { PlayerContext } from '../context/PlayerContext';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const DisplayAlbum = () => {
 
     const {id} = useParams(); 
-    const albumData = albumsData[id];
-    console.log(albumData);
-    const {playwithId} = useContext(PlayerContext);
+    const [albumData,setAlbumData] = useState(null);
+    const {playwithId, albumsData,songsData} = useContext(PlayerContext);
 
+    useEffect(()=>{
+        albumsData.map((item)=>{
+            if (item._id === id) {
+                setAlbumData(item);
+            }
+        })
+    }, [albumsData, id])
 
-  return (
+    
+
+  return albumData ? (
    <>
    <Navbar/>
    <div className='mt-10 flex gap-8 flex-col md:flex-row md:items-end'>
@@ -38,8 +48,8 @@ const DisplayAlbum = () => {
    </div>
    <hr />
    {
-    songsData.map((item, index) => (
-        <div onClick={()=>playwithId(item.id)} key={index} className='grid grid-cols-3 sm:grid-cols-4 gap-2 p-2 items-center text-[#a7a7a7] hover:bg-[#ffffff2b] cursor-pointer'>
+    songsData.filter((item) => item.album === albumData.name).map((item, index) => (
+        <div onClick={()=>playwithId(item._id)} key={index} className='grid grid-cols-3 sm:grid-cols-4 gap-2 p-2 items-center text-[#a7a7a7] hover:bg-[#ffffff2b] cursor-pointer'>
             <p className='text-white'>
                 <b className='mr-4 text-[#a7a7a7]'>{index+1}</b>
                 <img className='inline w-10 mr-5' src={item.image} alt="" />
@@ -48,11 +58,13 @@ const DisplayAlbum = () => {
             <p className='text-[15px]'>{albumData.name}</p>
             <p className='text-[15px] hidden sm:block'>5 Days ago</p>
             <p className='text-[15px] text-center'>{item.duration}</p>
+            
+
         </div>
     ))
    }
    </>
-  )
+  ) : null
 }
 
 export default DisplayAlbum

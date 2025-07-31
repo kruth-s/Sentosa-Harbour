@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { assets } from '../assets/assets'
-import { PlayerContext } from '../context/playercontext';
+import { PlayerContext } from '../context/PlayerContext';
 
 const player = () => {
 
@@ -8,7 +8,7 @@ const player = () => {
 
 
 
-  return (
+  return track ?  (
     <div className='h-[10%] bg-black flex justify-between items-center text-white px-4'>
         <div className='hidden lg:flex items-center gap-4'>
             <img className='w-12' src={track.image} alt="" />
@@ -50,7 +50,7 @@ const player = () => {
 
         </div>
     </div>
-  )
+  ) : null 
 }
 
 export default player
