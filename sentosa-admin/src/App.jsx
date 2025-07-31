@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Routes,Route } from 'react-router-dom';
+import AddSong from './pages/addSong';
+import AddAlbum from './pages/addAlbum';
+import ListAlbum from './pages/listAlbum';
+import ListSong from './pages/listSong';
+import Sidebar from './components/sidebar';
+import Navbar from './components/navbar';
 
-function App() {
-  const [count, setCount] = useState(0)
 
+export const url = 'http://localhost:4000'
+
+
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className='flex itens-start min-h-screen'>
+      <ToastContainer />
+      <Sidebar/>
+      <div className='flex-1 h-screen overflow-y-scroll bg-[#F3FFF7]'>
 
-export default App
+      <Navbar>
+
+      </Navbar>
+
+      <div className='pt-8 pl-5 sm:pt-12 sm:pl-12'>
+        <Routes>
+          <Route path='/add-song' element={<AddSong />} />
+          <Route path='/add-album' element={<AddAlbum />} />
+          <Route path='/list-album' element={<ListAlbum />} />
+          <Route path='/list-song' element={<ListSong />} />
+          
+        </Routes>
+
+      </div>
+        
+      </div>
+    </div>
+  );
+};
+
+export default App;
