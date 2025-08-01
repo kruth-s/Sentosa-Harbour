@@ -3,7 +3,7 @@ import Navbar from './navbar'
 // import { albumsData } from '../assets/assets'
 import AlbumItem from './albumitem'
 // import { songsData } from '../assets/assets'
-import SongItem from './SongItem'
+import SongItem from './songitem'
 import { useContext } from 'react'
 import { PlayerContext } from '../context/PlayerContext'
 
