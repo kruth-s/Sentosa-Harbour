@@ -8,7 +8,7 @@ export const PlayerContextProvider = (props) => {
   const seekBg = useRef();
   const seekBar = useRef();
 
-  const url = 'http://localhost:4000';
+  const url = "https://harbour-6l47.onrender.com";
 
   const [songsData, setSongsData] = useState([]);
   const [albumsData, setAlbumsData] = useState([]);
