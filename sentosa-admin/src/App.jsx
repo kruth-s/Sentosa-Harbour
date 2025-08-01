@@ -10,7 +10,7 @@ import Sidebar from './components/sidebar';
 import Navbar from './components/navbar';
 
 
-export const url = 'http://localhost:4000'
+export const url = "https://harbour-6l47.onrender.com";
 
 
 const App = () => {
